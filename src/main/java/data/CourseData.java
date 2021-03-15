@@ -1,6 +1,6 @@
 package data;
 
-public enum CourseList {
+public enum CourseData {
     JAVA("Java", 16),
     JDBC("JDBC", 24),
     SPRING("Spring", 16),
@@ -8,10 +8,10 @@ public enum CourseList {
     PAGE_OBJECT("Page object", 16),
     SELENIUM("Selenium", 16);
 
-    private final String name;
-    private final int durationInHours;
+    public final String name;
+    public final int durationInHours;
 
-    CourseList(String name, int durationInHours) {
+    CourseData(String name, int durationInHours) {
         this.name = name;
         this.durationInHours = durationInHours;
     }

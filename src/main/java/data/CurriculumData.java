@@ -1,12 +1,12 @@
 package data;
 
-public enum CurriculumList {
+public enum CurriculumData {
     JAVA_DEVELOPER("Java Developer"),
     AQE("AQE");
 
-    private final String name;
+    public final String name;
 
-    CurriculumList(String name) {
+    CurriculumData(String name) {
         this.name = name;
     }
 }
