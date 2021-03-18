@@ -7,12 +7,12 @@ import static lists.CourseList.aqeCourseList;
 import static lists.CourseList.javaDevCourseList;
 
 public class CurriculumList {
-    static Curriculum javaDeveloperCurriculum = Curriculum.builder()
+    public static Curriculum javaDeveloperCurriculum = Curriculum.builder()
             .courseList(javaDevCourseList)
-            .curriculum(CurriculumData.JAVA_DEVELOPER.name)
+            .curriculumName(CurriculumData.JAVA_DEVELOPER.name)
             .build();
-    static Curriculum aqeCurriculum = Curriculum.builder()
+    public static Curriculum aqeCurriculum = Curriculum.builder()
             .courseList(aqeCourseList)
-            .curriculum(CurriculumData.AQE.name)
+            .curriculumName(CurriculumData.AQE.name)
             .build();
 }

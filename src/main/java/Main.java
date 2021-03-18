@@ -1,23 +1,56 @@
-import java.util.Date;
+import constructors.Student;
+import lists.CurriculumList;
+import lists.StudentList;
+import lombok.SneakyThrows;
+import tools.ReportGenerator;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import static data.StudentData.IVANOV_I;
+import static data.StudentData.SIDOROV_I;
 
 public class Main {
+    @SneakyThrows
     public static void main(String[] args) {
-        Date currentDate;
-        try {
-            currentDate = readDate(args[0]);
-        } catch (NumberFormatException e){
-            System.out.println("First argument should be a date in format DD.MM.YYYY");
-            return;
-        } catch (IllegalArgumentException d){
-            System.out.println(d);
-            return;
-        }
 
-        String param = (args.length > 1) ? args[1] : "0";
+        System.out.println("Please input date of the report in format DD.MM.YYYY.");
+        Scanner scanner = new Scanner(System.in);
+        String dateOfReportAsString = scanner.nextLine();
+        readDate(dateOfReportAsString);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate dateOfReport = LocalDate.parse(dateOfReportAsString, formatter);
+        System.out.println("Please input type of report you wish to see: 1 - short report, 2 - full report. " +
+                "If you input anything else full report will be printed");
+        
+        String typeOfReport = scanner.nextLine();
+        List<Student> students = new ArrayList<>();
+        students.add(StudentList.studentIvanovI.toBuilder()
+                .curriculum(CurriculumList.javaDeveloperCurriculum.toBuilder().startDate(IVANOV_I.startDate).build())
+                .build());
+        students.add(StudentList.studentSidorovI.toBuilder()
+                .curriculum(CurriculumList.javaDeveloperCurriculum.toBuilder().startDate(SIDOROV_I.startDate).build())
+                .build());
+        
+        for (Student student:students) {
+            generateReport(typeOfReport, student, LocalDateTime.of(dateOfReport,LocalTime.now()));
+        }
     }
 
-    private static Date readDate(String args) throws IllegalArgumentException{
-        String[] date = args.split("\\.");
+    private static void generateReport(String param, Student student, LocalDateTime reportDate){
+        ReportGenerator reportGenerator = new ReportGenerator();
+        if (param.equals("1")) {
+            reportGenerator.generateShortReport(student, reportDate);
+        } else reportGenerator.generateFullReport(student, reportDate);
+    }
+    
+    private static LocalDateTime readDate(String dateOfReportAsString) throws IllegalArgumentException{
+        String[] date = dateOfReportAsString.split("\\.");
 
         int day,month,year;
 
@@ -51,8 +84,8 @@ public class Main {
         else if (month % 2 == 1 && day > 30 ) {
             throw new IllegalArgumentException("This month have only 30 days");
         }
-
-        return new Date(year - 1900, month - 1 , day,10,0);
-    }
+        return LocalDateTime.of(LocalDate.of(year, month, day),
+                LocalTime.now());
     }
 }
+
