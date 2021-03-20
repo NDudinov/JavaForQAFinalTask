@@ -21,7 +21,7 @@ public class CourseList {
                     .courseName(SPRING.name)
                     .durationInHours(SPRING.durationInHours)
                     .build()
-            );
+    );
     static final List<Course> aqeCourseList = Arrays.asList(
             Course.builder()
                     .courseName(TEST_DESIGN.name)
@@ -36,5 +36,4 @@ public class CourseList {
                     .durationInHours(SELENIUM.durationInHours)
                     .build()
     );
-    
 }

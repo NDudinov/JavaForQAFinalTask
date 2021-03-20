@@ -9,6 +9,4 @@ public enum CurriculumData {
     CurriculumData(String name) {
         this.name = name;
     }
-    
-    
 }
