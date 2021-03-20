@@ -16,6 +16,4 @@ public class StudentList {
             .specialization(SIDOROV_I.specialization)
             .startDate(SIDOROV_I.startDate)
             .build();
-    
-    
 }

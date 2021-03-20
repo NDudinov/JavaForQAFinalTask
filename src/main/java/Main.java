@@ -3,6 +3,7 @@ import lists.CurriculumList;
 import lists.StudentList;
 import lombok.SneakyThrows;
 import tools.ReportGenerator;
+import tools.TimeCalculator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static data.GeneralConstants.FULL_TIME_FORMATTER;
 import static data.StudentData.IVANOV_I;
 import static data.StudentData.SIDOROV_I;
 
@@ -19,40 +21,54 @@ public class Main {
     @SneakyThrows
     public static void main(String[] args) {
 
-        System.out.println("Please input date of the report in format DD.MM.YYYY.");
+        System.out.println("Please input date of the report in format DD.MM.YYYY. Current time will be used for calculation of hours.");
         Scanner scanner = new Scanner(System.in);
         String dateOfReportAsString = scanner.nextLine();
         readDate(dateOfReportAsString);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate dateOfReport = LocalDate.parse(dateOfReportAsString, formatter);
+        LocalDateTime dateTimeOfReport = LocalDateTime.of(dateOfReport, LocalTime.now());
         System.out.println("Please input type of report you wish to see: 1 - short report, 2 - full report. " +
                 "If you input anything else full report will be printed");
-        
+
         String typeOfReport = scanner.nextLine();
         List<Student> students = new ArrayList<>();
         students.add(StudentList.studentIvanovI.toBuilder()
-                .curriculum(CurriculumList.javaDeveloperCurriculum.toBuilder().startDate(IVANOV_I.startDate).build())
+                .curriculum(CurriculumList.javaDeveloperCurriculum.toBuilder()
+                        .startDate(IVANOV_I.startDate)
+                        .endDate(new TimeCalculator().calculateEndDate(IVANOV_I.startDate, CurriculumList.javaDeveloperCurriculum.curriculumLength()))
+                        .build())
                 .build());
         students.add(StudentList.studentSidorovI.toBuilder()
-                .curriculum(CurriculumList.javaDeveloperCurriculum.toBuilder().startDate(SIDOROV_I.startDate).build())
+                .curriculum(CurriculumList.aqeCurriculum.toBuilder()
+                        .startDate(SIDOROV_I.startDate)
+                        .endDate(new TimeCalculator().calculateEndDate(SIDOROV_I.startDate, CurriculumList.aqeCurriculum.curriculumLength()))
+                        .build())
                 .build());
-        
-        for (Student student:students) {
-            generateReport(typeOfReport, student, LocalDateTime.of(dateOfReport,LocalTime.now()));
+
+        if (typeOfReport.equals("1")) {
+            System.out.printf("Short Report (Generating report date - %s):%n", dateTimeOfReport.format(FULL_TIME_FORMATTER));
+        } else {
+            System.out.printf("Full Report (Generating report date - %s):%n", dateTimeOfReport.format(FULL_TIME_FORMATTER));
+        }
+        for (Student student : students) {
+            generateReport(typeOfReport, student, dateTimeOfReport);
         }
     }
 
-    private static void generateReport(String param, Student student, LocalDateTime reportDate){
+    private static void generateReport(String param, Student student, LocalDateTime reportDate) {
         ReportGenerator reportGenerator = new ReportGenerator();
         if (param.equals("1")) {
             reportGenerator.generateShortReport(student, reportDate);
-        } else reportGenerator.generateFullReport(student, reportDate);
+        } else {
+            reportGenerator.generateFullReport(student, reportDate);
+        }
     }
-    
-    private static LocalDateTime readDate(String dateOfReportAsString) throws IllegalArgumentException{
+
+    private static void readDate(String dateOfReportAsString) throws IllegalArgumentException {
         String[] date = dateOfReportAsString.split("\\.");
 
-        int day,month,year;
+        int day, month, year;
 
         day = Integer.parseInt(date[0]);
         if (day < 1 || day > 31) {
@@ -71,21 +87,17 @@ public class Main {
 
         if (month == 2 && day > 28 && year % 4 != 0) {
             throw new IllegalArgumentException("This month have only 28 days");
-        }
-        else if (month == 2 && year % 4 == 0 && day > 29) {
+        } else if (month == 2 && year % 4 == 0 && day > 29) {
             throw new IllegalArgumentException("This month have only 29 days");
         }
 
         if (month < 8) {
-            if (month % 2 == 0 && day > 30 ) {
+            if (month % 2 == 0 && day > 30) {
                 throw new IllegalArgumentException("This month have only 30 days");
             }
-        }
-        else if (month % 2 == 1 && day > 30 ) {
+        } else if (month % 2 == 1 && day > 30) {
             throw new IllegalArgumentException("This month have only 30 days");
         }
-        return LocalDateTime.of(LocalDate.of(year, month, day),
-                LocalTime.now());
     }
 }
 
