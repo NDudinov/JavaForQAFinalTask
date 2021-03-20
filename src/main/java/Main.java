@@ -65,7 +65,7 @@ public class Main {
         }
     }
 
-    private static LocalDateTime readDate(String dateOfReportAsString) throws IllegalArgumentException {
+    private static void readDate(String dateOfReportAsString) throws IllegalArgumentException {
         String[] date = dateOfReportAsString.split("\\.");
 
         int day, month, year;
@@ -98,8 +98,6 @@ public class Main {
         } else if (month % 2 == 1 && day > 30) {
             throw new IllegalArgumentException("This month have only 30 days");
         }
-        return LocalDateTime.of(LocalDate.of(year, month, day),
-                LocalTime.now());
     }
 }
 
