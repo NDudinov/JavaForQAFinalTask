@@ -1,6 +1,6 @@
 package lists;
 
-import constructors.Student;
+import dto.Student;
 
 import static data.StudentData.IVANOV_I;
 import static data.StudentData.SIDOROV_I;

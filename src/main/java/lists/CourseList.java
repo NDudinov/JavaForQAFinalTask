@@ -1,6 +1,6 @@
 package lists;
 
-import constructors.Course;
+import dto.Course;
 
 import java.util.Arrays;
 import java.util.List;

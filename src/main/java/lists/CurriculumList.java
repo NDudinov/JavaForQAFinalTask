@@ -1,6 +1,6 @@
 package lists;
 
-import constructors.Curriculum;
+import dto.Curriculum;
 import data.CurriculumData;
 
 import static lists.CourseList.aqeCourseList;

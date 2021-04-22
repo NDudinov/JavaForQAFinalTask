@@ -67,4 +67,39 @@ public class TimeCalculator {
         }
         return result;
     }
+
+    public static void readDate(String dateOfReportAsString) throws IllegalArgumentException {
+        String[] date = dateOfReportAsString.split("\\.");
+
+        int day, month, year;
+
+        day = Integer.parseInt(date[0]);
+        if (day < 1 || day > 31) {
+            throw new IllegalArgumentException("Illegal day format. day should be in range [1; 31]");
+        }
+
+        month = Integer.parseInt(date[1]);
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Illegal month format. Month should be in range [1; 12]");
+        }
+
+        year = Integer.parseInt(date[2]);
+        if (year < 1900 || year > 2100) {
+            throw new IllegalArgumentException("Illegal year format. Year should be in range [1900; 2100]");
+        }
+
+        if (month == 2 && day > 28 && year % 4 != 0) {
+            throw new IllegalArgumentException("This month have only 28 days");
+        } else if (month == 2 && year % 4 == 0 && day > 29) {
+            throw new IllegalArgumentException("This month have only 29 days");
+        }
+
+        if (month < 8) {
+            if (month % 2 == 0 && day > 30) {
+                throw new IllegalArgumentException("This month have only 30 days");
+            }
+        } else if (month % 2 == 1 && day > 30) {
+            throw new IllegalArgumentException("This month have only 30 days");
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package tools;
 
-import constructors.Student;
+import dto.Student;
 
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
@@ -51,6 +51,15 @@ public class ReportGenerator {
                 student.getCurriculum().getEndDate().format(FULL_TIME_FORMATTER));
         System.out.printf("Hours: %d %n", student.getCurriculum().curriculumLength());
         generateShortReport(student, reportDate);
+    }
+
+    public static void generateReport(String param, Student student, LocalDateTime reportDate) {
+        ReportGenerator reportGenerator = new ReportGenerator();
+        if (param.equals("1")) {
+            reportGenerator.generateShortReport(student, reportDate);
+        } else {
+            reportGenerator.generateFullReport(student, reportDate);
+        }
     }
 }
 
